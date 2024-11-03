@@ -9,10 +9,7 @@ use PDO;
 
 class VideoListController
 {
-  public function __construct(private VideoRepository $videoRepository)
-  {
-    
-  }
+  public function __construct(private VideoRepository $videoRepository) {}
 
   public function processaRequisicao(): void
   {

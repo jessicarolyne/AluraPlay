@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+session_start();
 
 use Alura\Mvc\Controller\{
     Controller,
@@ -9,8 +10,10 @@ use Alura\Mvc\Controller\{
     Error404Controller,
     NewVideoController,
     VideoFormController,
-    VideoListController
+    VideoListController,
+    LoginFormController
 };
+use Alura\Mvc\Repository\UserRepository;
 use Alura\Mvc\Repository\VideoRepository;
 
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -22,6 +25,12 @@ $videoRepository = new VideoRepository($pdo);
 $routes = require_once __DIR__ . '/../config/routes.php';
 $pathInfo = $_SERVER['PATH_INFO'] ?? '/';
 $httpMethod = $_SERVER['REQUEST_METHOD'];
+
+$isLoginRoute = $pathInfo === '/login';
+if (!array_key_exists('logado', $_SESSION) && !$isLoginRoute) :
+    header('Location: /login');
+    return;
+endif;
 
 $key = "$httpMethod|$pathInfo";
 if (array_key_exists($key, $routes)) :
